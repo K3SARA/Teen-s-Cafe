@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Quicksand", "Baloo 2", ui-rounded, system-ui, sans-serif;
+  --font-display: "Baloo 2", "Quicksand", ui-rounded, system-ui, sans-serif;
+  --font-logo: "Pirata One", "Baloo 2", serif;
+
+  /* pastel palette, tuned to the maroon logo mark */
+  --color-cream: #fdf8f2;
+  --color-cream-dark: #f6ece2;
+  --color-blush: #f7d9dc;
+  --color-blush-dark: #eeb1b8;
+  --color-maroon: #7a1620;
+  --color-maroon-dark: #591019;
+  --color-gold: #ecdcb8;
+  --color-gold-dark: #d9bd85;
+  --color-cocoa: #5c3a3a;
+  --color-cocoa-soft: #8a6a6a;
+  --color-peach: #f7e2ce;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-cream);
+  color: var(--color-cocoa);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-blush-dark);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #receipt-print-area,
+  #receipt-print-area * {
+    visibility: visible;
+  }
+  #receipt-print-area {
+    position: fixed;
+    inset: 0;
+    width: 80mm;
+    margin: 0 auto;
+    padding: 0;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
