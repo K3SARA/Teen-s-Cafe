@@ -29,6 +29,10 @@ src/
     MobileCartBar.jsx         # floating "View order" pill on mobile
     Inventory.jsx             # stock screen
     InventoryItem.jsx         # single stock row with +/- and low-stock highlight
+    Customers.jsx             # customer directory (optional — search, add/edit/delete)
+    CustomerCard.jsx           # single customer row with visit count + total spent
+    CustomerFormModal.jsx      # add/edit/delete a customer
+    CustomerPickerModal.jsx    # search & attach a customer at checkout (or skip for walk-in)
     Receipt.jsx / ReceiptModal.jsx  # printable receipt with logo + business details
     Logo.jsx                  # scalable SVG logo mark
   App.jsx                     # top-level state + data fetching, wired to the API
@@ -61,7 +65,11 @@ To try the full production setup locally: `npm run build && npm start`, then ope
 
 All menu items, inventory levels, and orders are stored server-side in a single JSON file at `data/db.json` (created and seeded automatically on first run from `src/data/menuData.js`). This survives restarts and redeploys as long as that file isn't wiped — see the Railway note below.
 
-The shopping cart itself stays client-side (it's transient until checkout), but checkout, inventory +/-, and menu add/edit/delete all go through the API and are persisted immediately.
+The shopping cart itself stays client-side (it's transient until checkout), but checkout, inventory +/-, menu add/edit/delete, and customer add/edit/delete all go through the API and are persisted immediately.
+
+## Customers (optional)
+
+The Customers tab is a lightweight, entirely optional directory of regulars — name, phone, email, notes. At checkout you can search and attach a customer to the sale, or just tap "Continue as walk-in" (the default) and check out with no customer at all. Attaching one bumps that customer's visit count and total spent, and prints their name on the receipt; skipping it changes nothing about the checkout flow.
 
 ## Deploying to Railway
 

@@ -12,6 +12,7 @@ function seedDb() {
   return {
     menuItems: seedMenuItems,
     inventory: seedInventory,
+    customers: [],
     orders: [],
     nextOrderNumber: FIRST_ORDER_NUMBER,
   };
@@ -24,7 +25,9 @@ function load() {
     fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2));
     return initial;
   }
-  return JSON.parse(fs.readFileSync(DB_FILE, "utf-8"));
+  const loaded = JSON.parse(fs.readFileSync(DB_FILE, "utf-8"));
+  loaded.customers ??= [];
+  return loaded;
 }
 
 const db = load();
@@ -71,11 +74,52 @@ export function adjustInventoryItem(id, delta) {
   return item;
 }
 
+export function getCustomers() {
+  return db.customers;
+}
+
+export function addCustomer(customer) {
+  const record = {
+    id: crypto.randomUUID(),
+    visitCount: 0,
+    totalSpent: 0,
+    ...customer,
+  };
+  db.customers.push(record);
+  persist();
+  return record;
+}
+
+export function updateCustomer(id, updates) {
+  const customer = db.customers.find((c) => c.id === id);
+  if (!customer) return null;
+  Object.assign(customer, updates);
+  persist();
+  return customer;
+}
+
+export function deleteCustomer(id) {
+  const existed = db.customers.some((c) => c.id === id);
+  db.customers = db.customers.filter((c) => c.id !== id);
+  if (existed) persist();
+  return existed;
+}
+
 export function getOrders() {
   return db.orders;
 }
 
-export function createOrder({ items, subtotal, tax, total }) {
+export function createOrder({ items, subtotal, tax, total, customerId }) {
+  let customerSnapshot = null;
+  if (customerId) {
+    const customer = db.customers.find((c) => c.id === customerId);
+    if (customer) {
+      customer.visitCount += 1;
+      customer.totalSpent += total;
+      customerSnapshot = { customerId: customer.id, customerName: customer.name };
+    }
+  }
+
   const order = {
     orderNumber: db.nextOrderNumber,
     items,
@@ -83,6 +127,7 @@ export function createOrder({ items, subtotal, tax, total }) {
     tax,
     total,
     timestamp: new Date().toISOString(),
+    ...customerSnapshot,
   };
   db.orders.push(order);
   db.nextOrderNumber += 1;

@@ -1,8 +1,9 @@
-import { CupSoda, Package } from "lucide-react";
+import { CupSoda, Package, Users } from "lucide-react";
 
 const NAV_ITEMS = [
   { id: "pos", label: "Billing", icon: CupSoda },
   { id: "inventory", label: "Stock", icon: Package },
+  { id: "customers", label: "Customers", icon: Users },
 ];
 
 export default function BottomNav({ activeTab, onChangeTab }) {

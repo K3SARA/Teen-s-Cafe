@@ -45,16 +45,42 @@ app.patch("/api/inventory/:id", (req, res) => {
   res.json(updated);
 });
 
+app.get("/api/customers", (req, res) => {
+  res.json(store.getCustomers());
+});
+
+app.post("/api/customers", (req, res) => {
+  const { name, phone, email, notes } = req.body;
+  if (!name || !name.trim()) {
+    return res.status(400).json({ error: "Name is required" });
+  }
+  res.status(201).json(
+    store.addCustomer({ name: name.trim(), phone: phone?.trim() ?? "", email: email?.trim() ?? "", notes: notes?.trim() ?? "" }),
+  );
+});
+
+app.put("/api/customers/:id", (req, res) => {
+  const updated = store.updateCustomer(req.params.id, req.body);
+  if (!updated) return res.status(404).json({ error: "Customer not found" });
+  res.json(updated);
+});
+
+app.delete("/api/customers/:id", (req, res) => {
+  const existed = store.deleteCustomer(req.params.id);
+  if (!existed) return res.status(404).json({ error: "Customer not found" });
+  res.status(204).end();
+});
+
 app.get("/api/orders", (req, res) => {
   res.json(store.getOrders());
 });
 
 app.post("/api/orders", (req, res) => {
-  const { items, subtotal, tax, total } = req.body;
+  const { items, subtotal, tax, total, customerId } = req.body;
   if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: "Cart is empty" });
   }
-  res.status(201).json(store.createOrder({ items, subtotal, tax, total }));
+  res.status(201).json(store.createOrder({ items, subtotal, tax, total, customerId: customerId || null }));
 });
 
 // Serve the built frontend (production)

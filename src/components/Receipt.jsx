@@ -4,7 +4,7 @@ import { TAX_RATE } from "../data/constants";
 import { formatMoney } from "../utils/currency";
 
 export default function Receipt({ receipt }) {
-  const { orderNumber, items, subtotal, tax, total, timestamp } = receipt;
+  const { orderNumber, items, subtotal, tax, total, timestamp, customerName } = receipt;
 
   return (
     <div id="receipt-print-area" className="mx-auto w-full max-w-[300px] bg-white px-5 py-6 text-cocoa">
@@ -25,6 +25,7 @@ export default function Receipt({ receipt }) {
           {timestamp.toLocaleDateString()} {timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
         </span>
       </div>
+      {customerName && <p className="mt-1 text-[11px] text-cocoa-soft">For: {customerName}</p>}
 
       <div className="my-3 border-t border-dashed border-cocoa-soft/50" />
 

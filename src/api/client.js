@@ -23,5 +23,10 @@ export const api = {
   adjustInventory: (id, delta) =>
     request(`/inventory/${id}`, { method: "PATCH", body: JSON.stringify({ delta }) }),
 
+  getCustomers: () => request("/customers"),
+  createCustomer: (customer) => request("/customers", { method: "POST", body: JSON.stringify(customer) }),
+  updateCustomer: (id, updates) => request(`/customers/${id}`, { method: "PUT", body: JSON.stringify(updates) }),
+  deleteCustomer: (id) => request(`/customers/${id}`, { method: "DELETE" }),
+
   createOrder: (order) => request("/orders", { method: "POST", body: JSON.stringify(order) }),
 };
